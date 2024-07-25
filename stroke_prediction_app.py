@@ -1,5 +1,5 @@
 import pickle
-import joblib
+import streamlit as st
 import numpy as np
 
 # Memastikan scikit-learn terinstal
