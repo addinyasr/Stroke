@@ -49,4 +49,7 @@ with open('categorical_columns.pkl', 'wb') as f:
 with open('unique_values.pkl', 'wb') as f:
     pickle.dump(unique_values, f)
 
+
 print("Model, label encoders, categorical columns, dan unique values berhasil disimpan.")
+
+
