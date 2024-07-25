@@ -1,6 +1,16 @@
-import pandas as pd
-import streamlit as st
 import pickle
+import joblib
+import numpy as np
+
+# Memastikan scikit-learn terinstal
+import subprocess
+import sys
+
+subprocess.check_call([sys.executable, "-m", "pip", "install", "scikit-learn"])
+
+# Memuat model dan label encoders yang disimpan
+model_filename = 'stroke_model.pkl'
+encoders_filename = 'label_encoders.pkl'
 
 # Fungsi untuk memproses input pengguna
 def preprocess_input(input_data, label_encoders, categorical_columns, data_columns):
