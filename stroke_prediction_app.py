@@ -1,21 +1,25 @@
-
 import pandas as pd
 import streamlit as st
 import pickle
 
-
 # Fungsi untuk memproses input pengguna
-def preprocess_input(input_data, label_encoders, categorical_columns, data_columns):
+def preprocess_input(input_data, label_encoders, categorical_columns, data_columns, scaler):
     input_df = pd.DataFrame([input_data])
     for column in categorical_columns:
         input_df[column] = label_encoders[column].transform(input_df[column])
     if 'bmi' in input_df.columns and input_df['bmi'].isnull().any():
         input_df['bmi'].fillna(data_columns['bmi'].median(), inplace=True)
-    return input_df[data_columns.columns]
 
-# Load model, label encoders, categorical columns, dan unique values
-with open('stroke_model.pkl', 'rb') as f:
+    # Standarisasi data input
+    input_df_scaled = scaler.transform(input_df[data_columns.columns])
+    return input_df_scaled
+
+# Load model, scaler, label encoders, categorical columns, dan unique values
+with open('stroke_model.sav', 'rb') as f:
     model = pickle.load(f)
+
+with open('scaler.sav', 'rb') as f:
+    scaler = pickle.load(f)
 
 with open('label_encoders.pkl', 'rb') as f:
     label_encoders = pickle.load(f)
@@ -102,7 +106,7 @@ user_input['smoking_status'] = smoking_status_map[user_input['smoking_status']]
 
 # Validasi input pengguna
 if st.button('Prediksi'):
-    processed_input = preprocess_input(user_input, label_encoders, categorical_columns, data_columns)
+    processed_input = preprocess_input(user_input, label_encoders, categorical_columns, data_columns, scaler)
     prediction = model.predict(processed_input)
     if prediction == 1:
         st.write("Pasien berisiko terkena stroke.")
