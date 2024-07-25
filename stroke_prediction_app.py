@@ -1,18 +1,7 @@
 import pandas as pd
 import streamlit as st
 import pickle
-from sklearn.naive_bayes import GaussianNB
-from sklearn.preprocessing import LabelEncoder
 
-# Fungsi untuk memproses input pengguna
-def preprocess_input(input_data, label_encoders, categorical_columns, data_columns):
-    input_df = pd.DataFrame([input_data])
-    for column in categorical_columns:
-        label_encoder = label_encoders[column]
-        input_df[column] = label_encoder.transform([input_data[column]])[0]
-    if 'bmi' in input_df.columns and pd.isnull(input_df['bmi']).any():
-        input_df['bmi'].fillna(data_columns['bmi'].median(), inplace=True)
-    return input_df[data_columns.columns]
 
 # Load model, label encoders, categorical columns, dan unique values
 with open('naive_bayes_model.pkl', 'rb') as f:
