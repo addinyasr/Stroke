@@ -1,20 +1,10 @@
-import pickle
+
+
+import pandas as pd
 import streamlit as st
-import numpy as np
+import pickle
+import sklearn 
 
-# Memastikan scikit-learn terinstal
-import subprocess
-import sys
-
-try:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "scikit-learn"])
-except subprocess.CalledProcessError as e:
-    print(f"Error during pip install: {e}")
-    # Handle the error appropriately, e.g., log the error, provide user feedback, etc.
-
-# Memuat model dan label encoders yang disimpan
-model_filename = 'stroke_model.pkl'
-encoders_filename = 'label_encoders.pkl'
 
 # Fungsi untuk memproses input pengguna
 def preprocess_input(input_data, label_encoders, categorical_columns, data_columns):
