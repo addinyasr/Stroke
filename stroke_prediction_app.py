@@ -6,7 +6,11 @@ import numpy as np
 import subprocess
 import sys
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "scikit-learn"])
+try:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "scikit-learn"])
+except subprocess.CalledProcessError as e:
+    print(f"Error during pip install: {e}")
+    # Handle the error appropriately, e.g., log the error, provide user feedback, etc.
 
 # Memuat model dan label encoders yang disimpan
 model_filename = 'stroke_model.pkl'
