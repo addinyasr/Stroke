@@ -1,10 +1,20 @@
+
 import pandas as pd
 import streamlit as st
 import pickle
 
 
+# Fungsi untuk memproses input pengguna
+def preprocess_input(input_data, label_encoders, categorical_columns, data_columns):
+    input_df = pd.DataFrame([input_data])
+    for column in categorical_columns:
+        input_df[column] = label_encoders[column].transform(input_df[column])
+    if 'bmi' in input_df.columns and input_df['bmi'].isnull().any():
+        input_df['bmi'].fillna(data_columns['bmi'].median(), inplace=True)
+    return input_df[data_columns.columns]
+
 # Load model, label encoders, categorical columns, dan unique values
-with open('naive_bayes_model.pkl', 'rb') as f:
+with open('stroke_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 with open('label_encoders.pkl', 'rb') as f:
@@ -12,6 +22,9 @@ with open('label_encoders.pkl', 'rb') as f:
 
 with open('categorical_columns.pkl', 'rb') as f:
     categorical_columns = pickle.load(f)
+
+with open('unique_values.pkl', 'rb') as f:
+    unique_values = pickle.load(f)
 
 # Load dataset untuk mendapatkan informasi kolom
 file_path = 'full_data.csv'
